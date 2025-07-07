@@ -10,8 +10,5 @@
       "src": "/api/(.*)",
       "dest": "/api"
     }
-  ],
-  "env": {
-    "TZ": "Asia/Shanghai"
-  }
+  ]
 }
