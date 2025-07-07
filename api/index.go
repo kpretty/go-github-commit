@@ -6,6 +6,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
+	"sort"
 )
 
 const (
@@ -76,5 +77,9 @@ func getGithubCommit(userName string) ([]*githubCommitInfo, error) {
 		})
 	})
 
+	// 按时间升序
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].Data < result[j].Data
+	})
 	return result, nil
 }
