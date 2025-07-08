@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"strings"
 )
 
 const (
@@ -29,13 +30,24 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	style := r.URL.Query().Get("style")
+
 	if r.URL.Path == "/api" {
 		githubCommit, err := getGithubCommit(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(githubCommit)
+		// 判断是不是 echarts 风格
+		if strings.ToLower(style) == "echarts" {
+			result := make([][]string, 0)
+			for i := range githubCommit {
+				result = append(result, []string{githubCommit[i].Data, githubCommit[i].Level})
+			}
+			err = json.NewEncoder(w).Encode(githubCommit)
+		} else {
+			err = json.NewEncoder(w).Encode(githubCommit)
+		}
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
