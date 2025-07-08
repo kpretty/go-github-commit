@@ -44,7 +44,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			for i := range githubCommit {
 				result = append(result, []string{githubCommit[i].Data, githubCommit[i].Level})
 			}
-			err = json.NewEncoder(w).Encode(githubCommit)
+			err = json.NewEncoder(w).Encode(result)
 		} else {
 			err = json.NewEncoder(w).Encode(githubCommit)
 		}
